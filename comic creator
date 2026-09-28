@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ComicCraft - AI Comic Story Creator</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f0ff;
+            color: #222;
+        }
+
+        /* HEADER */
+        header {
+            background: linear-gradient(135deg, #5b2c83, #9b59b6);
+            color: white;
+            text-align: center;
+            padding: 45px 20px;
+        }
+
+        header h1 {
+            font-size: 45px;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 18px;
+        }
+
+        /* NAVBAR */
+        nav {
+            background: white;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #5b2c83;
+            font-weight: bold;
+            margin: 0 15px;
+        }
+
+        /* MAIN */
+        .container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+        }
+
+        .card h2 {
+            color: #5b2c83;
+            margin-bottom: 15px;
+        }
+
+        .description {
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        /* TEXT AREA */
+        textarea {
+            width: 100%;
+            height: 150px;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 12px;
+            font-size: 16px;
+            resize: vertical;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #8e44ad;
+        }
+
+        /* BUTTON */
+        .button-area {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        button {
+            background: #7d3c98;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 17px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #5b2c83;
+        }
+
+        /* COMIC PANELS */
+        .comic-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .comic-panel {
+            border: 3px solid #5b2c83;
+            border-radius: 15px;
+            padding: 20px;
+            min-height: 180px;
+            background: #faf8ff;
+        }
+
+        .comic-panel h3 {
+            color: #7d3c98;
+            margin-bottom: 15px;
+        }
+
+        .comic-panel p {
+            line-height: 1.6;
+        }
+
+        /* FEATURES */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .feature {
+            background: #faf8ff;
+            padding: 20px;
+            text-align: center;
+            border-radius: 15px;
+        }
+
+        .feature h3 {
+            margin: 10px 0;
+            color: #5b2c83;
+        }
+
+        /* LOADING */
+        #loading {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+            color: #7d3c98;
+            font-weight: bold;
+        }
+
+        /* FOOTER */
+        footer {
+            background: #291533;
+            color: white;
+            text-align: center;
+            padding: 30px;
+            margin-top: 50px;
+        }
+
+        /* MOBILE */
+        @media (max-width: 700px) {
+
+            header h1 {
+                font-size: 32px;
+            }
+
+            .comic-container {
+                grid-template-columns: 1fr;
+            }
+
+            .features {
+                grid-template-columns: 1fr;
+            }
+
+            nav a {
+                margin: 0 5px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header>
+        <h1>🎨 ComicCraft</h1>
+        <p>AI Comic Story Creator using Gemini Models</p>
+    </header>
+
+
+    <!-- NAVIGATION -->
+    <nav>
+        <a href="#create">Create Comic</a>
+        <a href="#features">Features</a>
+        <a href="#about">About</a>
+    </nav>
+
+
+    <div class="container">
+
+        <!-- CREATE SECTION -->
+        <section class="card" id="create">
+
+            <h2>✨ Create Your Comic Story</h2>
+
+            <p class="description">
+                Enter your imagination below and create an exciting comic story.
+            </p>
+
+            <textarea
+                id="storyPrompt"
+                placeholder="Example: A young superhero discovers a magical power and saves his city...">
+            </textarea>
+
+            <div class="button-area">
+                <button onclick="generateComic()">
+                    🚀 Generate Comic
+                </button>
+            </div>
+
+            <div id="loading">
+                🤖 Creating your comic story...
+            </div>
+
+        </section>
+
+
+        <!-- COMIC RESULT -->
+        <section class="card" id="result">
+
+            <h2>📖 Your Comic Story</h2>
+
+            <div class="comic-container">
+
+                <div class="comic-panel">
+                    <h3>🟣 Panel 1 – Beginning</h3>
+                    <p id="panel1">
+                        Your generated story will appear here.
+                    </p>
+                </div>
+
+                <div class="comic-panel">
+                    <h3>🔵 Panel 2 – Challenge</h3>
+                    <p id="panel2">
+                        Your generated story will appear here.
+                    </p>
+                </div>
+
+                <div class="comic-panel">
+                    <h3>🟢 Panel 3 – Action</h3>
+                    <p id="panel3">
+                        Your generated story will appear here.
+                    </p>
+                </div>
+
+                <div class="comic-panel">
+                    <h3>🟠 Panel 4 – Ending</h3>
+                    <p id="panel4">
+                        Your generated story will appear here.
+                    </p>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- FEATURES -->
+        <section class="card" id="features">
+
+            <h2>🌟 Features</h2>
+
+            <div class="features">
+
+                <div class="feature">
+                    <div>🤖</div>
+                    <h3>AI Story Creation</h3>
+                    <p>Create stories using AI technology.</p>
+                </div>
+
+                <div class="feature">
+                    <div>📚</div>
+                    <h3>Comic Panels</h3>
+                    <p>Convert your idea into multiple comic scenes.</p>
+                </div>
+
+                <div class="feature">
+                    <div>✨</div>
+                    <h3>Creative Stories</h3>
+                    <p>Turn simple ideas into exciting adventures.</p>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ABOUT -->
+        <section class="card" id="about">
+
+            <h2>ℹ️ About ComicCraft</h2>
+
+            <p>
+                ComicCraft is an AI-powered web application designed to
+                help users create personalized comic stories from simple
+                text prompts. The application can use Gemini models to
+                generate creative stories and organize them into comic panels.
+            </p>
+
+        </section>
+
+    </div>
+
+
+    <!-- FOOTER -->
+    <footer>
+
+        <h3>🎨 ComicCraft</h3>
+
+        <p>AI Comic Story Creator using Gemini Models</p>
+
+        <p>© 2026 ComicCraft. All Rights Reserved.</p>
+
+    </footer>
+
+
+    <!-- JAVASCRIPT -->
+    <script>
+
+        function generateComic() {
+
+            let prompt =
+                document.getElementById("storyPrompt").value.trim();
+
+            if (prompt === "") {
+
+                alert("Please enter your story idea!");
+
+                return;
+            }
+
+            document.getElementById("loading").style.display = "block";
+
+            setTimeout(function() {
+
+                document.getElementById("panel1").innerText =
+                    "The adventure begins with this idea: " +
+                    prompt +
+                    ". Our hero discovers that something unusual is about to happen.";
+
+                document.getElementById("panel2").innerText =
+                    "Suddenly, a new challenge appears. The hero must find a clever way to overcome the problem.";
+
+                document.getElementById("panel3").innerText =
+                    "The hero takes action and faces the challenge with courage. An exciting battle of ideas begins.";
+
+                document.getElementById("panel4").innerText =
+                    "After overcoming the challenge, the hero learns an important lesson and the adventure comes to a happy ending.";
+
+                document.getElementById("loading").style.display = "none";
+
+            }, 1500);
+        }
+
+    </script>
+
+</body>
+</html>
